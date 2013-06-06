@@ -1,3 +1,4 @@
+
 <html><head>
 <style>
 * {font-family: "Lucida Console", Monaco, monospace; font-size: 14px;}
@@ -5,11 +6,11 @@ input { font-size: 12px; line-height: 14px;}
 textarea {width:500px;height:300px;}
 div, form { display: none; }
 </style>
-<script src="https://webrtc-samples.googlecode.com/svn/trunk/apprtc/js/adapter.js"></script>
   <script src="https://crypto.stanford.edu/sjcl/sjcl.js"></script>
 <title>bitty chat</title>
 </head>
 <body>
+  <div id="about"><a href="http://timbauman.github.io/bittychat/">about bitty chat</a></div>
   <div id="starting"><button id="new_button">new chat</button> or <input id="remote_code" type="text" placeholder="insert code here" /> <button id="load_button">load existing chat</button></div>
   <div id="sharing">
     share this URL <input type="text" disabled="disabled" id="url" placeholder="loading..." />
@@ -23,6 +24,16 @@ div, form { display: none; }
   <div id="closed">connection lost...</div>
 <script>
 
+/* config */
+/* brokers chat connections - untrusted */
+var URL = 'https://sleepy-refuge-6582.herokuapp.com/';
+
+/* stun server */
+var servers = {
+  iceServers: [{ 'url': 'stun:stun.l.google.com:19302' }]
+};
+
+/* WebRTC compatability */
 var RTCPeerConnection = null;
 var getUserMedia = null;
 var attachMediaStream = null;
@@ -49,13 +60,9 @@ if (navigator.mozGetUserMedia) {
 }
 
 performance.now = performance.now || performance.webkitNow;
-/*var $ = function(i) { return document.getElementById(i); }; */
 
-var URL = 'https://sleepy-refuge-6582.herokuapp.com/';
+/* the code */
 
-var servers = {
-  iceServers: [{ 'url': 'stun:stun.l.google.com:19302' }]
-};
 var options = {
   optional: [{ RtpDataChannels: true }]
 };
@@ -67,6 +74,7 @@ var form = document.getElementById('chatform');
 var startDiv = document.getElementById('starting');
 var sharingDiv = document.getElementById('sharing');
 var connectingDiv = document.getElementById('connecting');
+document.getElementById('about').style.display = 'block';
 
 var channel;
 sendButton.disabled = true;

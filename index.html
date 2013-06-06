@@ -1,0 +1,36 @@
+<html>
+<head>
+    <title>bitty chat</title>
+    <style>
+    body {font-family: "Lucida Console", Monaco, monospace; font-size: 14px;}
+    input { font-size: 12px; line-height: 14px;}
+    textarea {width:500px;height:300px;}
+    .container { width: 800px; margin: 40px auto 40px auto;}
+    </style>
+</head>
+<body>
+    <div class="container">
+    <h1>This is bitty chat</h1>
+    <h3>bitty chat is a very small chat client written in Javascript</h3>
+    <p>
+        bitty chat uses <a href="http://www.webrtc.org/">WebRTC</a> to create a small, sort-of-secure chat connection between two browsers. It's intended to work kind of like <a href="https://crypto.cat/">CryptoCat</a> originally did. The cool thing is it is small enough that (most of) the source code can be sent directly to the other client, who can paste the source directly in their web browser location bar. If you can send someone either the "URL" or the connection code the web page generates, the other user can connect to you with an encrypted chat session. WebRTC has built in encryption, which we use to secure the conversation itself. We add onto this encryption using the <a href="https://crypto.stanford.edu/sjcl/">Stanford Javascript Crypto Library</a> to ensure that the third party chat connection server won't learn the secret key.
+    </p>
+    <p>
+        There are two caveats to the security of bitty chat:
+        <ul>
+            <li>The person who receives the chat invitation must trust that the URL or code was sent over a secure channel, and that the other party didn't mess with the code somehow.</li>
+            <li>You must trust that the <a href="https://crypto.stanford.edu/sjcl/">Stanford Javascript Crypto Library</a> is secure, and that it has been delivered securely to your browser. It's too big to include in the HTML of this page--if we did, the code couldn't be pasted directly into the location bar.</li>
+        </ul>
+    </p>
+    <p>
+        Because bitty chat uses WebRTC, an emerging web technology, it currently only works in the <a href="https://www.google.com/intl/en/chrome/browser/">Chrome web browser</a>.
+    </p>
+    <p>
+        Here is <a href="https://github.com/timbauman/bittychat">the code</a>.
+    </p>
+    <p>
+        Here is <a href="http://timbauman.github.io/bittychat/client.html">an example</a> using my server.
+    </p>
+</div>
+</body>
+</html>

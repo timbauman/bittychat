@@ -9,10 +9,11 @@ div, form { display: none; }
 <title>bitty chat</title>
 </head>
 <body>
+  <div id="about"><a href="http://timbauman.github.io/bittychat/">about bitty chat</a></div>
   <div id="starting"><button id="new_button">new chat</button> or <input id="remote_code" type="text" placeholder="insert code here" /> <button id="load_button">load existing chat</button></div>
   <div id="sharing">
     share this URL <input type="text" disabled="disabled" id="url" placeholder="loading..." />
-    or this code <input type="text" disabled="disabled" id="code" placeholder="loading..." /><br />
+    or this connection code <input type="text" disabled="disabled" id="code" placeholder="loading..." /><br />
   </div>
   <div id="connecting">waiting for connection...</div>
   <form id="chatform">
@@ -72,6 +73,7 @@ var form = document.getElementById('chatform');
 var startDiv = document.getElementById('starting');
 var sharingDiv = document.getElementById('sharing');
 var connectingDiv = document.getElementById('connecting');
+document.getElementById('about').style.display = 'block';
 
 var channel;
 sendButton.disabled = true;

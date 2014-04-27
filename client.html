@@ -26,7 +26,7 @@ div, form { display: none; }
 
 /* config */
 /* brokers chat connections - untrusted */
-var URL = 'https://sleepy-refuge-6582.herokuapp.com/';
+var URL = 'http://localhost:8000/';
 
 /* stun server */
 var servers = {
@@ -121,9 +121,7 @@ document.getElementById('load_button').onclick = function() {
 function generateKeys() {
   if (!pc1.localDescription) {
     /* not sure if this is secure but it keeps shuffling the key until it gets an offer */
-    k = sjcl.random.randomWords(1,9)[0].toString(); /* not secure */
     id = sjcl.random.randomWords(1,9)[0].toString();
-    setTimeout(generateKeys, 90);
   }
 }
 
@@ -162,16 +160,15 @@ function send() {
   return false;
 }
 
-function closeDataChannels() {
+
+window.onbeforeunload = function() {
   channel.close();
   pc1.close();
   pc1 = null;
   sendButton.disabled = true;
   dataChannelSend.value = "";
   dataChannelReceive.value = "";
-}
-
-window.onbeforeunload = closeDataChannels;
+};
 
 function createdDesc(desc) {
   pc1.setLocalDescription(desc);
@@ -187,7 +184,16 @@ function createdDesc(desc) {
     console.log(offer);
     sendOffer(offer);
   } else {
-    document.getElementById('url').value = 'data:text/html;,' + document.documentElement.innerHTML.replace(/k='';/, "k='" + k + "';").replace(/id='';/, "id='" + id + "';").replace(/d={};/, "d=" + j + ";");
+    /* set the key! */
+    m = (/AES_CM_128_HMAC_SHA1_80 inline:(\S+)/).exec(desc.sdp);
+    k = m[1];
+    /* The ([^)]) prevents us from matching the regular expressions */
+    document.getElementById('url').value =
+      'data:text/html;,'
+        + document.documentElement.innerHTML
+            .replace(/([^)])k=(''|"")(\W)/, "$1k='" + k + "'$3")
+            .replace(/([^)])id=(''|"")(\W)/, "$1id='" + id + "'$3")
+            .replace(/([^)])d={}(\W)/, "$1d=" + j + "$2");
     document.getElementById('code').value = JSON.stringify({k:k,id:id,d:{desc: desc, peers: cands}});
     /* begin polling for offers */
     listenForOffers();
@@ -225,13 +231,6 @@ function listenForOffers() {
     req.send();
     setTimeout(listenForOffers, 2000);
   }
-}
-
-function receiveChannelCallback(event) {
-  channel = event.channel;
-  channel.onmessage = onReceiveMessageCallback;
-  channel.onopen = onOpen;
-  channel.onclose = onClose;
 }
 
 function onReceiveMessageCallback(event) {
